@@ -1,65 +1,93 @@
 import Head from 'next/head'
-import styles from '../styles/Home.module.css'
+import styled from 'styled-components';
+import { useSelector } from 'react-redux';
 
-export default function Home() {
-  return (
-    <div className={styles.container}>
-      <Head>
-        <title>Create Next App</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+import CountDown from '../src/containers/CountDown.js';
+import CandidateList from '../src/containers/CandidateList.js';
+import Winner from '../src/containers/Winner.js';
 
-      <main className={styles.main}>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
+import {
+    flexRowStartStart,
+    flexRowCenterCenter,
+    flexColStartStart
+} from '../src/style/flex.css.js';
 
-        <p className={styles.description}>
-          Get started by editing{' '}
-          <code className={styles.code}>pages/index.js</code>
-        </p>
+export default function App() {
+    const { winnerId } = useSelector(state => state);
 
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h3>Documentation &rarr;</h3>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
-
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h3>Learn &rarr;</h3>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/master/examples"
-            className={styles.card}
-          >
-            <h3>Examples &rarr;</h3>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h3>Deploy &rarr;</h3>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
-        </div>
-      </main>
-
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <img src="/vercel.svg" alt="Vercel Logo" className={styles.logo} />
-        </a>
-      </footer>
-    </div>
-  )
+    return (
+        <AppContainer>
+            <Head>
+                <title>Lottery App</title>
+                <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Tangerine" />
+                <link rel="icon" href="/favicon.ico" />
+            </Head>
+            <AppContent>
+                { winnerId === null &&
+                    <>
+                        <CountDownContent />
+                        <CandidateListContent />
+                    </>
+                }
+                { winnerId !== null && <WinnerContent />}
+            </AppContent>
+        </AppContainer>
+    );
 }
+
+export const AppContainer = styled.div`
+    width: 100vw;
+    height: 100vh;
+    ${flexRowCenterCenter};
+`;
+
+export const AppContent = styled.div`
+    position: relative;
+    padding: 1.5rem;
+    width: 40rem;
+    height: 25rem;
+    border: 1px solid #000;
+    overflow: auto;
+    ${flexRowStartStart};
+    flex-wrap: wrap;
+
+    @media (max-width: 768px) {
+        border: none;
+        width: 100%;
+        height: 100%;
+        padding: 0 1.5rem;
+        ${flexColStartStart};
+    }
+`;
+
+export const CountDownContent = styled(CountDown)`
+    flex: 1;
+    height: 100%;
+
+    @media (max-width: 768px) {
+        width: 100%;
+        height: auto;
+        margin-bottom: 2rem;
+    }
+`;
+
+export const CandidateListContent = styled(CandidateList)`
+    flex: 1;
+    height: 100%;
+
+    @media (max-width: 768px) {
+        width: 100%;
+        height: auto;
+        margin-bottom: 2rem;
+    }
+`;
+
+export const WinnerContent = styled(Winner)`
+    width: 100%;
+    height: 100%;
+
+    @media (max-width: 768px) {
+        width: 100%;
+        height: 100vh;
+    }
+`;
